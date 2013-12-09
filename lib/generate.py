@@ -18,8 +18,10 @@ def generate(iface,webfolder):
   else:
     print "No file /tmp/clients - try scan network for new devices"
   for line in c:
+    
     hw=line.split("-")[0]
     ip=line.split("-")[1]
+    print "---- " + hw
     
     user_file=webfolder+hw+".txt"
     conf=create_conf(hw,ip,iface)
@@ -34,6 +36,7 @@ def create_conf(hw,ip,iface):
   IP="IP="+ip
   DNS="DNS=8.8.8.8\n"
   GW="GW=%s\n" % get_ip(iface)[0]
+  MASK="MASK=255.255.255.0"
 
   return MAC+IP+DNS+GW
   

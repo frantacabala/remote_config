@@ -49,7 +49,7 @@ def check(f,hw):
 	for line in f:
 		line= line.split('-',1)
 		if line[0] == hw:
-			print "This client <%s> exists! Ignore..." % (hw)
+			print "| This client <%s> exists! Ignore..." % (hw)
 			return 'false'
 	return 'true'
 def get_ip(iface):

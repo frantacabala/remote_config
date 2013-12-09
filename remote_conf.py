@@ -50,7 +50,7 @@ def ssh_menu(iface,webfolder):
 	      SSH_CONNECTION = ssh_connect(username,ip)
 	      IS_CONNECT=1
 	      print "| Sending file..."
-	      filename="./remote_conf.py"
+	      filename="./remote_cli.sh"
 	      ssh_send(SSH_CONNECTION,filename)
 	      IS_CONNECT=1
 	      print "| Done! - file was sended into home folder of connected user..."

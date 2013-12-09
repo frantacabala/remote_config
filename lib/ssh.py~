@@ -30,10 +30,10 @@ def ssh_execute(client,command):
 	print "***************** SERVER STDERR****************"
 	print stderr.read()
   except:
-    raise
+    print "|"
 def scp_send(client,filename):
   try:
     scp = SCPClient(client.get_transport())
     scp.put(filename,"./remote_conf")
   except:
-    print ""
+    print "|"

@@ -60,6 +60,7 @@ def ssh_menu(iface,webfolder):
 	    except:
 	      print"|"
 	  else:
+	    print "+--------------------------------------------------------------------------\n\n\n"
 	    continue
 	c.close()
 	print "Upload config scripts done!"
