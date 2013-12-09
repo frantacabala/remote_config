@@ -16,16 +16,15 @@ def scann_port(ifa):
 		addr="%s/%s" % (nm,ip[1])
 		alive,dead=srp(Ether(dst="ff:ff:ff:ff:ff:ff")/ARP(pdst=addr),iface=ifa, timeout=2, verbose=0)
         	f = open_file()
-		print "MAC - IP"
+		print "| MAC - IP"
 		for i in range(0,len(alive)):
             		client = alive[i][1].hwsrc + "-" + alive[i][1].psrc
 			ret=check(f,alive[i][1].hwsrc)			
-			if ret != 'true':
-				break			
-			f.write(client)
-			f.write('\n')
-			print client
-		raw_input("\n\nPress enter to continue...")
+			if ret == 'true':
+			  f.write(client)
+			  f.write('\n')
+			  print "| " + client
+		
 		f.close()
    	#except:
         	#pass
@@ -50,7 +49,7 @@ def check(f,hw):
 	for line in f:
 		line= line.split('-',1)
 		if line[0] == hw:
-			print "This client <%s> exists! Ignore..." % (hw)
+			print "| This client <%s> exists! Ignore..." % (hw)
 			return 'false'
 	return 'true'
 def get_ip(iface):

@@ -3,24 +3,37 @@ import paramiko
 
 from scp import SCPClient
 
+global CLIENT
 
 def ssh_connect(username,server):
+	global CLIENT
 	try:
-		print "login to server %s@%s..." % (username,server)
+		#print "login to server %s@%s..." % (username,server)
 		client = paramiko.SSHClient()
 		client.load_system_host_keys()
 		client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-		name = "Enter password for %s@%s :" % (username,server)
+		name = "| Enter password for %s@%s :" % (username,server)
 		passwd = getpass.getpass(name)
 		client.connect(server,username=username,password=passwd)
-		print "loged in..."
-		raw_input("\nPress enter to continue...")
+		print "| loged in..."
+		
 		return client	
-	except:
-		print "client does not exist.."
-		raw_input("\nPress enter to continue...")
+	except paramiko.AuthenticationException:
+		print "| client does not exist.."
+		#raw_input("\nPress enter to continue...")
 
 def ssh_execute(client,command):
+  try:
 	stdin,stdout,stderr = client.exec_command(command)
-	return stdout.read()
-
+	print "***************** SERVER STDOUT****************"
+	print stdout.read()
+	print "***************** SERVER STDERR****************"
+	print stderr.read()
+  except:
+    print "|"
+def scp_send(client,filename):
+  try:
+    scp = SCPClient(client.get_transport())
+    scp.put(filename,"./remote_conf")
+  except:
+    print "|"
