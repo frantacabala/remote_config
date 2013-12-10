@@ -1,6 +1,7 @@
 import os,subprocess, getpass
 import paramiko
 
+
 from scp import SCPClient
 
 global CLIENT
@@ -25,15 +26,19 @@ def ssh_connect(username,server):
 def ssh_execute(client,command):
   try:
 	stdin,stdout,stderr = client.exec_command(command)
-	print "***************** SERVER STDOUT****************"
-	print stdout.read()
-	print "***************** SERVER STDERR****************"
-	print stderr.read()
+	print "| ***************** SERVER STDOUT****************"
+	print "| " +stdout.read().strip()
+	print "| ***************** SERVER STDERR****************"
+	print "| "+ stderr.read.strip()
+	
   except:
+    
     print "|"
 def scp_send(client,filename):
   try:
     scp = SCPClient(client.get_transport())
-    scp.put(filename,"./remote_conf")
+    stdin,stdout,stderr=scp.put(filename,"/usr/bin/rconf_client")
+    
   except:
-    print "|"
+    
+    print "| You ar not root!"

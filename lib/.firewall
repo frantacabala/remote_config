@@ -1,0 +1,74 @@
+
+PUBIF="eth0"
+IPTABLES=`which iptables`
+###############
+# KERNEL PARAMETER CONFIGURATION
+
+# PREVENT YOU SYSTEM FROM ANSWERING ICMP ECHO REQUESTS
+#echo 1 > /proc/sys/net/ipv4/icmp_echo_ignore_all
+
+# DROP ICMP ECHO-REQUEST MESSAGES SENT TO BROADCAST OR MULTICAST ADDRESSES
+#echo 1 > /proc/sys/net/ipv4/icmp_echo_ignore_broadcasts
+
+# DONT ACCEPT ICMP REDIRECT MESSAGES
+#echo 0 > /proc/sys/net/ipv4/conf/all/accept_redirects
+
+# DONT SEND ICMP REDIRECT MESSAGES
+#echo 0 > /proc/sys/net/ipv4/conf/all/send_redirects
+
+# DROP SOURCE ROUTED PACKETS
+#echo 0 > /proc/sys/net/ipv4/conf/all/accept_source_route
+
+# ENABLE TCP SYN COOKIE PROTECTION FROM SYN FLOODS
+#echo 1 > /proc/sys/net/ipv4/tcp_syncookies
+
+# ENABLE SOURCE ADDRESS SPOOFING PROTECTION
+#echo 1 > /proc/sys/net/ipv4/conf/all/rp_filter
+
+# LOG PACKETS WITH IMPOSSIBLE ADDRESSES (DUE TO WRONG ROUTES) ON YOUR NETWORK
+#echo 1 > /proc/sys/net/ipv4/conf/all/log_martians
+
+# DISABLE IPV4 FORWARDING
+#echo 0 > /proc/sys/net/ipv4/ip_forward
+
+###############
+$IPTABLES -F
+# INPUT
+
+# DROP INVALID
+$IPTABLES -A INPUT -m state --state INVALID -j DROP
+
+# ALLOW ONLY ESTABLISHED, RELATED
+$IPTABLES -A INPUT -p tcp -i $PUBIF -m state --state ESTABLISHED,RELATED -j ACCEPT
+$IPTABLES -A INPUT -p udp -i $PUBIF -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+# DROP INVALID SYN PACKETS
+$IPTABLES -A INPUT -p tcp --tcp-flags ALL ACK,RST,SYN,FIN -j DROP
+$IPTABLES -A INPUT -p tcp --tcp-flags SYN,FIN SYN,FIN -j DROP
+$IPTABLES -A INPUT -p tcp --tcp-flags SYN,RST SYN,RST -j DROP
+
+# MAKE SURE NEW INCOMING TCP CONNECTIONS ARE SYN PACKETS; OTHERWISE WE NEED TO DROP THEM 
+$IPTABLES -A INPUT -p tcp ! --syn -m state --state NEW -j DROP
+
+# DROP PACKETS WITH INCOMING FRAGMENTS. THIS ATTACK RESULT INTO LINUX SERVER PANIC SUCH DATA LOSS
+$IPTABLES -A INPUT -f -j DROP
+
+
+###############
+# OUTPUT
+
+# DROP INVALID
+$IPTABLES -A OUTPUT -m state --state INVALID -j DROP
+
+# DROP INVALID SYN PACKETS
+$IPTABLES -A OUTPUT -p tcp --tcp-flags ALL ACK,RST,SYN,FIN -j DROP
+$IPTABLES -A OUTPUT -p tcp --tcp-flags SYN,FIN SYN,FIN -j DROP
+$IPTABLES -A OUTPUT -p tcp --tcp-flags SYN,RST SYN,RST -j DROP
+
+# MAKE SURE NEW OUTGOING TCP CONNECTIONS ARE SYN PACKETS; OTHERWISE WE NEED TO DROP THEM 
+$IPTABLES -A OUTPUT -p tcp ! --syn -m state --state NEW -j DROP
+
+# DROP PACKETS WITH OUTGOING FRAGMENTS. THIS ATTACK RESULT INTO LINUX SERVER PANIC SUCH DATA LOSS
+$IPTABLES -A OUTPUT -f -j DROP
+
+

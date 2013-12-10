@@ -39,8 +39,8 @@ def ssh_menu(iface,webfolder):
 	scann_port(iface)
 	print "| Done!"
 	print "+---------------------------------------------------\n\n\n"
-	if os.path.exists("./.clients"):
-	  c=open_clients("./.clients")
+	if os.path.exists("./lib/.clients"):
+	  c=open_clients("./lib/.clients")
 	else:
 	  print "No file /tmp/clients - try scan network for new devices"
 	for line in c:
@@ -52,20 +52,29 @@ def ssh_menu(iface,webfolder):
 	  if ans == "y" or ans == "Y":
 	    try:
 	      print "| ======================="
+	      print "| Need to be connected as root user!!!"
 	      username = raw_input("| Insert your username: ")
 	      print "| Connecting...."
 	      SSH_CONNECTION = ssh_connect(username,ip)
 	      IS_CONNECT=1
 	      print "| Sending file..."
-	      filename="./remote_cli.sh"
+	      filename="./lib/remote_cli.sh"
 	      ssh_send(SSH_CONNECTION,filename)
 	      IS_CONNECT=1
-	      print "| Done! - file was sended into home folder of connected user..."
+	      #print "| Done! - file was sended into home folder of connected user..."
+	      print "| Executing script..."
+	      try:
+		IS_CONNECT=1
+		ssh_exec_menu(SSH_CONNECTION)
+	      except:
+		print "| Do not have permissions for run operation. You have to run it again"
 	      print "| Disconnecting..."
 	      SSH_CONNECTION.close()
 	      print "+--------------------------------------------------------------------------\n\n\n"
 	    except:
-	      print"| Client probably do not support port 22 (ssh)"
+	      print"| Client probably do not support port 22 (ssh) or invalid username and password"
+	      print "+--------------------------------------------------------------------------\n\n\n"
+	      
 	  else:
 	    print "+--------------------------------------------------------------------------\n\n\n"
 	    continue
@@ -94,7 +103,7 @@ def generate_config(iface,webfolder):
 def ssh_exec_menu(client):
 	global IS_CONNECT
 	if IS_CONNECT == 1:	  
-	  ssh_execute(client,"l-la")
+	  ssh_execute(client,'bash /usr/bin/rconf_client &> /var/log/rconf_client.log')
 	  IS_CONNECT=0
    	else:
 	  print "You are not connected! Please connect..."
@@ -170,7 +179,7 @@ def main2():
 	elif options.remove:
 	  print "+---------------------------------------------------"
 	  print "| Removing known clients..."
-	  open("./.clients",'w').close()
+	  open("./lib/.clients",'w').close()
 	  print "| Removed!"
 	  print "+---------------------------------------------------\n\n\n"
 	else:

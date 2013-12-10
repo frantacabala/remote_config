@@ -41,7 +41,7 @@ def get_net_addr(ip,netmask):
 		return 	new_sp
 
 def open_file():
-	path="./.clients"
+	path="./lib/.clients"
 	f = open(path,'a+')
 	return f
 def check(f,hw):

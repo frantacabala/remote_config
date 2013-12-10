@@ -1,7 +1,7 @@
 # Automatic generatorof configuration
 
 from n_scan import get_ip,get_ip_mask
-import os,sys
+import os,sys,shutil
 
 def open_file(path):
   open(path,'w').close()
@@ -14,10 +14,10 @@ def open_clients(path):
   
 def generate(iface,webfolder):
   count=0
-  if os.path.exists("./.clients"):
-    c=open_clients("./.clients")
+  if os.path.exists("./lib/.clients"):
+    c=open_clients("./lib/.clients")
   else:
-    print "No file /tmp/clients - try scan network for new devices"
+    print "No file ./lib/.clients - try scan network for new devices"
   for line in c:
     count=count+1
     hw=line.split("-")[0]
@@ -31,7 +31,8 @@ def generate(iface,webfolder):
     user.write(conf)
     user.close()
   
-  create_firewall(webfolder)
+  fire_path=webfolder + "firewall"
+  shutil.copy2("./lib/.firewall",fire_path)
   c.close()  
 def create_conf(hw,ip,iface,count):
   MAC="MAC="+hw+"\n"
