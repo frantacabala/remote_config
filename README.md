@@ -21,9 +21,9 @@ RCONF
 	-	je zde jeden zdrojovy kod knihovny - scp.py, ktery je vytvoren 3. stranou 
  	
 pro spravnou funkcnost je nutno mit naistalovane nasledujich knihovny:
-	./lib/scp.py - pridavny modul do knihovny paramiko, ktery se stara o zabezpecene kopirovani souboru pomoci scp
-	# apt-get install python-nmap
-	# apt-get install python-paramiko
-	# apt-get install python-scapy
-	# apt-get install tcpdump
-	# apt-get install python-netifaces
+	-	./lib/scp.py - pridavny modul do knihovny paramiko, ktery se stara o zabezpecene kopirovani souboru pomoci scp
+	-	# apt-get install python-nmap
+	-	# apt-get install python-paramiko
+	-	# apt-get install python-scapy
+	-	# apt-get install tcpdump
+	-	# apt-get install python-netifaces
