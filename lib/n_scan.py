@@ -41,7 +41,7 @@ def get_net_addr(ip,netmask):
 		return 	new_sp
 
 def open_file():
-	path="/tmp/clients"
+	path="./.clients"
 	f = open(path,'a+')
 	return f
 def check(f,hw):
@@ -53,11 +53,20 @@ def check(f,hw):
 			return 'false'
 	return 'true'
 def get_ip(iface):
+    try:
 	ip = []
 	ip.append(netifaces.ifaddresses(iface)[2][0]['addr'])
 	ip.append(netifaces.ifaddresses(iface)[2][0]['netmask'])
 	ip[1]=sum([bin(int(x)).count('1') for x in ip[1].split('.')])
 	return ip
-
+    except ValueError:
+      print "| Invalid interface!"
+      print "+---------------------------------------------------\n\n\n"
+      exit(1)
+	
+def get_ip_mask(iface):
+  return netifaces.ifaddresses(iface)[2][0]['netmask']
+	
+	
 def get_iface():
 	return netifaces.interfaces()
