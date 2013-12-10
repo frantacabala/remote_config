@@ -14,3 +14,16 @@ RCONF
 	- scripty nejsou pouze odeslany na klientske pocitace, avsak jsou i nasledne po zkopirovani spusteny na danem klientovi a ten si spusti uvodni konfiguraci, ktera zahrnuje nakonfigurovani sitoveho rozhrani eth0(IP,MASKA,DNS,GW,HOSTNAME), ale take nastaveni firewallu
 - po vygenerovani konfiguracnich souboru a firewallu je mozno provadet zmeny dle libosti a v zavislosti na definovanych promennych, avsak neni zarucena funcnost v pripade zadani nespravnych promennych. 
 	- oprava je mozna opet pomoci prepinace -g, ale ztrati se tim cela manualne nastavena konfigurace a je vse obnoveno automaticky
+
+
+
+- v programu jsou pouzite externi knihovny, ktere byly naistalovane pomoci interniho balickovaciho systemu apt-get
+	-	je zde jeden zdrojovy kod knihovny - scp.py, ktery je vytvoren 3. stranou 
+ 	
+pro spravnou funkcnost je nutno mit naistalovane nasledujich knihovny:
+	./lib/scp.py - pridavny modul do knihovny paramiko, ktery se stara o zabezpecene kopirovani souboru pomoci scp
+	# apt-get install python-nmap
+	# apt-get install python-paramiko
+	# apt-get install python-scapy
+	# apt-get install tcpdump
+	# apt-get install python-netifaces
